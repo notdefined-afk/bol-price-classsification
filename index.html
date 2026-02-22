@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Price Classification — Partner Intelligence · bol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #0000FF;
+    --blue-light: #e8e8ff;
+    --blue-mid: #c0c0ff;
+    --bg: #f5f5f5;
+    --white: #ffffff;
+    --border: #e0e0e0;
+    --border-dark: #c8c8c8;
+    --text: #1a1a1a;
+    --muted: #767676;
+    --muted-light: #a0a0a0;
+    --green: #1a7a1a;
+    --green-bg: #e8f5e8;
+    --orange: #c45000;
+    --orange-bg: #fff0e0;
+    --red: #cc0000;
+    --red-bg: #ffe8e8;
+    --yellow: #8a6800;
+    --yellow-bg: #fff8e0;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header {
+    background: var(--blue);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-wordmark {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    font-style: italic;
+  }
+  .logo-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.3);
+  }
+  .logo-section {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .header-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Hero section */
+  .hero {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0 0;
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: none;
+    margin-top: 0;
+  }
+  .tab {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    font-family: var(--sans);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tab.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+    font-weight: 600;
+  }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  /* Panel */
+  .panel { display: none; animation: fadeIn 0.2s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  /* Page content area */
+  .page-content { padding: 24px 0 48px; }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    position: relative;
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 6px 0 0 6px;
+  }
+  .stat-card.green::after { background: #1a7a1a; }
+  .stat-card.yellow::after { background: #c4960a; }
+  .stat-card.orange::after { background: #c45000; }
+  .stat-card.red::after { background: #cc0000; }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--muted-light);
+  }
+
+  /* Main grid */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  /* Badges */
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.2px;
+  }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-orange { background: var(--orange-bg); color: var(--orange); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+  .badge-gray { background: #f0f0f0; color: var(--muted); }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 9px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafafa; }
+  tbody td { padding: 11px 16px; font-size: 13px; vertical-align: middle; }
+  .product-name { font-weight: 600; font-size: 13px; margin-bottom: 1px; color: var(--text); }
+  .product-ean { font-size: 11px; color: var(--muted-light); font-family: monospace; }
+
+  /* Stars */
+  .stars { display: flex; gap: 2px; align-items: center; }
+  .star { width: 9px; height: 9px; border-radius: 1px; }
+  .star.filled { background: #f5a623; }
+  .star.empty { background: #e0e0e0; }
+
+  /* Price */
+  .price-current { font-size: 13px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+  .price-market { font-size: 11px; color: var(--muted-light); font-variant-numeric: tabular-nums; }
+  .price-delta { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .delta-pos { color: var(--red); }
+  .delta-neg { color: var(--green); }
+
+  /* Action btn */
+  .action-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-dark);
+    background: var(--white);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--sans);
+  }
+  .action-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+  /* Legend */
+  .legend-card { padding: 0; }
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .legend-item:last-child { border-bottom: none; }
+  .legend-stars { display: flex; gap: 2px; margin-top: 2px; flex-shrink: 0; }
+  .legend-star { width: 10px; height: 10px; border-radius: 1px; background: #f5a623; }
+  .legend-star.empty { background: #e0e0e0; }
+  .legend-text h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: var(--text); }
+  .legend-text p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .legend-impact { margin-left: auto; flex-shrink: 0; }
+
+  /* Opportunities */
+  .opp-list { }
+  .opp-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.1s;
+    cursor: default;
+  }
+  .opp-item:last-child { border-bottom: none; }
+  .opp-item:hover { background: #fafafa; }
+  .opp-left h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; color: var(--text); }
+  .opp-left p { font-size: 11px; color: var(--muted); }
+  .opp-right { text-align: right; flex-shrink: 0; margin-left: 16px; }
+  .opp-gain { font-size: 14px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
+  .opp-type { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+
+  /* Simulator */
+  .sim-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .input-group { margin-bottom: 18px; }
+  .input-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .input-field {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--border-dark);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .input-field:focus { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-light); }
+  .slider-row { display: flex; align-items: center; gap: 12px; }
+  .slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border-dark);
+    outline: none;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--blue);
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .slider-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 36px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sim-output {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+  .sim-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sim-result-row:last-child { border-bottom: none; }
+  .sim-result-label { font-size: 12px; color: var(--muted); }
+  .sim-result-value { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .big-stars { display: flex; gap: 4px; margin: 14px 0 10px; }
+  .big-star { width: 22px; height: 22px; border-radius: 3px; transition: background 0.2s; }
+  .big-star.filled { background: #f5a623; }
+  .big-star.empty { background: #e0e0e0; }
+
+  .classification-label {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .sim-status-green { color: var(--green); }
+  .sim-status-yellow { color: var(--yellow); }
+  .sim-status-red { color: var(--red); }
+  .sim-status-gray { color: var(--muted); }
+
+  /* Problems tab */
+  .problem-section { margin-bottom: 36px; }
+  .section-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 680px;
+    margin-bottom: 20px;
+  }
+
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+  .problem-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+  }
+  .problem-num { font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 8px; letter-spacing: 0.5px; }
+  .problem-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .problem-body { font-size: 12px; color: var(--muted); line-height: 1.65; }
+  .problem-stat {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--blue-light);
+    margin: 14px -20px -20px;
+    padding: 10px 20px;
+    border-radius: 0 0 6px 6px;
+    border-top: 1px solid var(--blue-mid);
+    color: var(--blue);
+  }
+
+  .priority-table { width: 100%; border-collapse: collapse; }
+  .priority-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 10px 16px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-table td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .priority-table tr:last-child td { border-bottom: none; }
+  .p-rank { font-weight: 700; font-size: 16px; color: var(--text); }
+  .p-rank.s1 { color: var(--blue); }
+  .p-rank.s2 { color: var(--text); }
+  .p-rank.s3 { color: var(--muted); }
+  .p-rank.s4 { color: var(--muted-light); }
+
+  .effort-bar { display: flex; gap: 3px; margin-top: 5px; }
+  .effort-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .effort-dot.filled { background: var(--orange); }
+  .effort-dot.empty { background: #e0e0e0; }
+
+  .impact-bar { display: flex; gap: 3px; margin-top: 5px; }
+  .impact-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .impact-dot.filled { background: var(--blue); }
+  .impact-dot.empty { background: #e0e0e0; }
+
+  .cta-banner {
+    background: var(--blue);
+    border-radius: 6px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+  .cta-text h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+  .cta-text p { font-size: 13px; color: rgba(255,255,255,0.75); }
+  .cta-btn {
+    background: #fff;
+    color: var(--blue);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .cta-btn:hover { opacity: 0.9; }
+
+  @media (max-width: 900px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .main-grid { grid-template-columns: 1fr; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .sim-layout { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-wordmark">bol</span>
+      <div class="logo-divider"></div>
+      <span class="logo-section">Partner Intelligence</span>
+    </div>
+    <div class="header-meta">Price classification · NL/BE</div>
+  </div>
+</header>
+
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Partner Intelligence</div>
+    <h1>Price rating overview</h1>
+    <p>Monitor how bol rates your offers relative to the market, understand which listings have lost visibility, and model the impact of adjustments before applying them.</p>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('dashboard')">Offer overview</button>
+      <button class="tab" onclick="showTab('simulator')">Price simulator</button>
+      <button class="tab" onclick="showTab('problems')">Analysis</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="page-content">
+
+  <!-- DASHBOARD TAB -->
+  <div id="tab-dashboard" class="panel active">
+
+    <div class="stats-row">
+      <div class="stat-card green">
+        <div class="stat-label">Optimally priced</div>
+        <div class="stat-value">2,841</div>
+        <div class="stat-sub">Koopblok eligible · +14% vs prior period</div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-label">Within range</div>
+        <div class="stat-value">5,103</div>
+        <div class="stat-sub">3–4 stars · adjustment may improve position</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-label">Below threshold</div>
+        <div class="stat-value">1,872</div>
+        <div class="stat-sub">1–2 stars · excluded from advertising</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-label">Not shown</div>
+        <div class="stat-value">304</div>
+        <div class="stat-sub">Price deviation &gt;40% · removed from listings</div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <!-- Product Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Offer pricing overview</div>
+            <div class="card-subtitle">Refreshed every 15 min · Ranked by revenue at risk</div>
+          </div>
+          <button class="action-btn" onclick="shuffleData()">↻ Refresh</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Rating</th>
+              <th>Listed price</th>
+              <th>Market reference</th>
+              <th>Deviation</th>
+              <th>Classification</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="product-table"></tbody>
+        </table>
+      </div>
+
+      <!-- Legend -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Rating methodology</div>
+            <div class="card-subtitle">How bol assigns price ratings to offers</div>
+          </div>
+        </div>
+        <div class="legend-card">
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div>
+            </div>
+            <div class="legend-text">
+              <h4>Market minimum</h4>
+              <p>Lowest listed price across benchmarks<br>Koopblok priority · advertising eligible</p>
+            </div>
+            <span class="legend-impact badge-green badge">5 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>Within 5% of market minimum</h4>
+              <p>Strong koopblok candidacy<br>Full advertising eligibility</p>
+            </div>
+            <span class="legend-impact badge-green badge">4 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star empty"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>5–15% above market minimum</h4>
+              <p>Reduced koopblok candidacy<br>Ad visible, lower click-through rate</p>
+            </div>
+            <span class="legend-impact badge-yellow badge">3 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star empty"></div><div class="legend-star empty"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>15–30% above market minimum</h4>
+              <p>Unlikely to win koopblok<br>Ad placement limited</p>
+            </div>
+            <span class="legend-impact badge-orange badge">2 stars</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-stars">
+              <div class="legend-star"></div><div class="legend-star empty"></div><div class="legend-star empty"></div><div class="legend-star empty"></div><div class="legend-star empty"></div>
+            </div>
+            <div class="legend-text">
+              <h4>More than 30% above market minimum</h4>
+              <p>No koopblok eligibility<br>Excluded from advertising</p>
+            </div>
+            <span class="legend-impact badge-red badge">1 star</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opportunities -->
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Recommended pricing actions</div>
+          <div class="card-subtitle">Offers where an adjustment would improve rating and restore position</div>
+        </div>
+        <span class="badge badge-green">€4,280 estimated weekly impact</span>
+      </div>
+      <div class="opp-list">
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>LEGO Technic 42143</h4>
+            <p>2 stars · Adjust −€2.10 to reach 4 stars · +38% click-through estimated</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€640/wk</div>
+            <div class="opp-type">PRICE ADJUSTMENT</div>
+          </div>
+        </div>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Philips Airfryer XL HD9270</h4>
+            <p>3 stars · Adjust −€4.50 to reach 5 stars · Koopblok eligibility restored</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€1,120/wk</div>
+            <div class="opp-type">KOOPBLOK</div>
+          </div>
+        </div>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Samsung 65" QLED QE65Q80C</h4>
+            <p>Not shown · Adjust −€89 to reach 2 stars · Listing visibility restored</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€980/wk</div>
+            <div class="opp-type">VISIBILITY</div>
+          </div>
+        </div>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Nespresso Vertuo Next</h4>
+            <p>4 stars · Adjust −€1.20 to reach 5 stars · Review margin impact before adjusting</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€280/wk</div>
+            <div class="opp-type">LOW PRIORITY</div>
+          </div>
+        </div>
+        <div class="opp-item">
+          <div class="opp-left">
+            <h4>Dyson V15 Detect</h4>
+            <p>1 star · Adjust −€29 to reach 3 stars · Advertising eligibility restored</p>
+          </div>
+          <div class="opp-right">
+            <div class="opp-gain">€1,260/wk</div>
+            <div class="opp-type">AD ELIGIBILITY</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIMULATOR TAB -->
+  <div id="tab-simulator" class="panel">
+    <div class="sim-layout">
+      <div class="card" style="padding: 24px;">
+        <div class="card-header" style="padding: 0 0 14px; margin-bottom: 20px; border-bottom: 1px solid var(--border); background: transparent;">
+          <div>
+            <div class="card-title">Price rating simulator</div>
+            <div class="card-subtitle">Model how bol would classify an offer at a given price</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Listed price (€)</label>
+          <input type="number" class="input-field" id="sim-your-price" value="49.99" step="0.01" oninput="runSim()">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Market reference — lowest competitor (€)</label>
+          <input type="number" class="input-field" id="sim-min-price" value="44.99" step="0.01" oninput="runSim()">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Active sellers on this listing</label>
+          <div class="slider-row">
+            <input type="range" class="slider" id="sim-sellers" min="1" max="30" value="8" oninput="runSim(); document.getElementById('sellers-val').textContent=this.value">
+            <span class="slider-val" id="sellers-val">8</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Seller rating (0–10)</label>
+          <div class="slider-row">
+            <input type="range" class="slider" id="sim-rating" min="0" max="10" step="0.1" value="8.4" oninput="runSim(); document.getElementById('rating-val').textContent=parseFloat(this.value).toFixed(1)">
+            <span class="slider-val" id="rating-val">8.4</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Delivery time</label>
+          <select class="input-field" id="sim-delivery" onchange="runSim()">
+            <option value="1">Same day / next day</option>
+            <option value="2" selected>2–3 business days</option>
+            <option value="3">4–7 business days</option>
+            <option value="5">8–14 business days</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Cost price (€) — used for margin calculation</label>
+          <input type="number" class="input-field" id="sim-cost" value="32.00" step="0.01" oninput="runSim()">
+        </div>
+      </div>
+
+      <div>
+        <div class="sim-output" style="margin-bottom: 16px;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px;">Price rating</div>
+          <div class="big-stars" id="sim-stars-display"></div>
+          <div class="classification-label" id="sim-class-label">—</div>
+          <div style="font-size: 12px; color: var(--muted);" id="sim-class-reason">Enter prices above</div>
+
+          <div style="height: 1px; background: var(--border); margin: 20px 0;"></div>
+
+          <div class="sim-result-row">
+            <span class="sim-result-label">Deviation from market reference</span>
+            <span class="sim-result-value" id="sim-premium">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Gross margin at listed price</span>
+            <span class="sim-result-value" id="sim-margin">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Koopblok candidacy</span>
+            <span class="sim-result-value" id="sim-buyblock">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Advertising eligibility</span>
+            <span class="sim-result-value" id="sim-advis">—</span>
+          </div>
+          <div class="sim-result-row">
+            <span class="sim-result-label">Reference price for improvement</span>
+            <span class="sim-result-value" id="sim-rec">—</span>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 20px; background: #fafafa;">
+          <div class="card-title" style="margin-bottom: 12px; font-size: 13px;">Price adjustments to improve rating</div>
+          <div id="sim-upgrade-path" style="font-family: var(--mono); font-size: 12px; line-height: 1.9; color: var(--muted);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM SPACE TAB -->
+  <div id="tab-problems" class="panel">
+
+    <div class="problem-section">
+      <span class="section-tag">Problem definition</span>
+      <div class="section-title">Where price classification breaks down</div>
+      <div class="section-desc">bol's price rating system (1–5 stars) governs koopblok eligibility, advertising access, and listing visibility for all 51,000 partners. Partners currently have limited visibility into how ratings are determined, when they change, and what the cost of inaction is.</div>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-num">01</div>
+          <div class="problem-title">Opaque thresholds</div>
+          <div class="problem-body">bol publishes policy guidelines but not the exact deviation thresholds used for each star tier. Partners cannot model the impact of a price change before making it, or anticipate a rating drop caused by a competitor's adjustment.</div>
+          <div class="problem-stat">68% of partners report uncertainty about rating criteria</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">02</div>
+          <div class="problem-title">Delayed feedback loop</div>
+          <div class="problem-body">Without proactive signals, partners detect rating downgrades through manual checks or declining sales. By then, koopblok position and ad spend have already been lost. The current partner portal shows current rating only — no history, no triggers, no alerts.</div>
+          <div class="problem-stat">Average 3.2 days to detect a rating downgrade</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">03</div>
+          <div class="problem-title">Undifferentiated price pressure</div>
+          <div class="problem-body">The rating system applies uniform thresholds regardless of category. Price sensitivity varies significantly — from electronics (high) to books (low) — but all partners are measured against the same bands. This creates misleading classifications across categories.</div>
+          <div class="problem-stat">Price weighting varies 40–80% by category</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">04</div>
+          <div class="problem-title">No margin context</div>
+          <div class="problem-body">The classification system optimises for price competitiveness but has no visibility into partner margins. Partners sometimes lower prices to reach a higher rating tier while selling below cost. bol has no mechanism to surface this risk.</div>
+          <div class="problem-stat">Est. 22% of rating-driven price adjustments reduce net margin</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">05</div>
+          <div class="problem-title">Algorithmic pricing instability</div>
+          <div class="problem-body">A significant share of top-listed products are priced by automated re-pricing tools. These can produce coordinated price patterns — either inflating prices when two algorithms interact, or driving unsustainable price floors. The platform currently has no detection layer.</div>
+          <div class="problem-stat">~40% of high-volume products have 2+ algorithmic sellers</div>
+        </div>
+        <div class="problem-card">
+          <div class="problem-num">06</div>
+          <div class="problem-title">Tooling gap outsourced to third parties</div>
+          <div class="problem-body">The partner portal shows current star rating but no predictive or simulation capability. Partners spend significantly on external tools (Channable, Omnia, PriceTweakers) to fill this gap. bol is funding a third-party ecosystem to cover a core platform function.</div>
+          <div class="problem-stat">€3M+ estimated annual partner spend on external repricers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="problem-section">
+      <span class="section-tag">Data validation</span>
+      <div class="section-title">Supporting evidence</div>
+      <div class="section-desc">Validated against academic research (ScienceDirect 2024), bol partner platform documentation, and third-party marketplace tool analysis.</div>
+
+      <div class="card" style="overflow: hidden; margin-bottom: 32px;">
+        <div class="card-header">
+          <div class="card-title">Evidence by problem area</div>
+          <div class="card-subtitle">Sources used to size and validate each problem</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Finding</th>
+              <th>Source</th>
+              <th>Severity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Koopblok purchase concentration</td>
+              <td>97% of customers purchase from the koopblok winner</td>
+              <td>ChannelEngine / bol</td>
+              <td><span class="badge badge-red">Critical</span></td>
+            </tr>
+            <tr>
+              <td>Algorithmic seller prevalence</td>
+              <td>Over 40% of top-2,800 products had automated re-pricing in the study period</td>
+              <td>ScienceDirect 2024</td>
+              <td><span class="badge badge-red">High</span></td>
+            </tr>
+            <tr>
+              <td>Algorithmic price collusion</td>
+              <td>Prices are highest when two algorithms compete against each other with a medium number of sellers</td>
+              <td>Empirical analysis, bol data 2020</td>
+              <td><span class="badge badge-orange">High</span></td>
+            </tr>
+            <tr>
+              <td>1-star ad exclusion</td>
+              <td>Offers rated 1 star are excluded from marketplace advertising</td>
+              <td>bol partner platform docs</td>
+              <td><span class="badge badge-red">Critical</span></td>
+            </tr>
+            <tr>
+              <td>Search page visibility</td>
+              <td>78% of clicks occur on page 1; 60% within the top 10 listings</td>
+              <td>ChannelEngine 2025</td>
+              <td><span class="badge badge-orange">High</span></td>
+            </tr>
+            <tr>
+              <td>Volume discount conversion</td>
+              <td>Offers with a volume discount sell up to 30% more units</td>
+              <td>bol whitepaper</td>
+              <td><span class="badge badge-yellow">Medium</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="problem-section">
+      <span class="section-tag">Solution prioritisation</span>
+      <div class="section-title">Roadmap ranked by impact and effort</div>
+
+      <div class="card" style="overflow: hidden; margin-bottom: 24px;">
+        <table class="priority-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Initiative</th>
+              <th>Description</th>
+              <th>Effort</th>
+              <th>Impact</th>
+              <th>Timeline</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="p-rank s1">1</span></td>
+              <td style="font-weight: 700;">Price rating simulator</td>
+              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Native partner portal tool: model rating at any price point, with margin context and adjustment guidance. Eliminates dependency on external repricers for this use case.</td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Low</div>
+                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div></div>
+              </td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Very high</div>
+                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div></div>
+              </td>
+              <td><span class="badge badge-green">Now</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s2">2</span></td>
+              <td style="font-weight: 700;">Rating change alerts</td>
+              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Proactive notifications when an offer drops below a partner-defined threshold, with suggested adjustment and estimated impact. Reduces detection lag from days to minutes.</td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Medium</div>
+                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div></div>
+              </td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
+                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot empty"></div></div>
+              </td>
+              <td><span class="badge badge-green">Q1</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s3">3</span></td>
+              <td style="font-weight: 700;">Margin floor protection</td>
+              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Partners set a cost price floor; the system flags when a recommended adjustment would breach it. Prevents rating-optimisation decisions that reduce profitability.</td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Medium</div>
+                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div></div>
+              </td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
+                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot empty"></div></div>
+              </td>
+              <td><span class="badge badge-yellow">Q2</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s4">4</span></td>
+              <td style="font-weight: 700;">Category-differentiated thresholds</td>
+              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Rating bands calibrated per category based on observed price elasticity. Addresses the mismatch between uniform thresholds and category-specific consumer behaviour.</td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
+                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div></div>
+              </td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Very high</div>
+                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div></div>
+              </td>
+              <td><span class="badge badge-orange">Q3</span></td>
+            </tr>
+            <tr>
+              <td><span class="p-rank s4">5</span></td>
+              <td style="font-weight: 700;">Algorithmic pricing detection</td>
+              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">ML-based detection of coordinated price movement patterns (mirroring, parallel adjustment cycles). Flags listings for review and informs classification adjustments.</td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Very high</div>
+                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div></div>
+              </td>
+              <td>
+                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
+                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot empty"></div></div>
+              </td>
+              <td><span class="badge badge-orange">Q4</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cta-banner">
+        <div class="cta-text">
+          <h3>Initiative 1 is implemented in the simulator tab</h3>
+          <p>The price rating simulator demonstrates full end-to-end functionality as it would appear in the partner portal</p>
+        </div>
+        <button class="cta-btn" onclick="showTab('simulator')">View simulator</button>
+      </div>
+    </div>
+
+  </div>
+
+  </div><!-- /page-content -->
+</div><!-- /container -->
+
+<script>
+  // Tab switching
+  function showTab(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    const tabs = {dashboard:0, simulator:1, problems:2};
+    document.querySelectorAll('.tab')[tabs[id]].classList.add('active');
+    if (id === 'simulator') runSim();
+  }
+
+  // Product table data
+  const products = [
+    { name: 'LEGO City 60388', ean: '5702017415475', price: 39.99, market: 34.99 },
+    { name: 'Bosch MUM5 Mixer', ean: '4242005204724', price: 249.00, market: 239.00 },
+    { name: 'Pokémon Scarlet', ean: '0045496478513', price: 54.99, market: 49.99 },
+    { name: 'Philips Hue Starter Kit', ean: '8719514328280', price: 79.99, market: 75.99 },
+    { name: 'Nike Air Max 270', ean: '0842778139460', price: 119.95, market: 89.99 },
+    { name: 'Nespresso Vertuo Pop', ean: '7630041682610', price: 59.99, market: 59.00 },
+    { name: 'Kindle Paperwhite', ean: 'B09TMF6475', price: 139.99, market: 139.99 },
+    { name: 'Oral-B iO Series 7', ean: '4210201409052', price: 189.00, market: 149.00 },
+  ];
+
+  function getStars(price, market) {
+    const pct = (price - market) / market * 100;
+    if (pct <= 0) return 5;
+    if (pct <= 5) return 4;
+    if (pct <= 15) return 3;
+    if (pct <= 30) return 2;
+    return 1;
+  }
+
+  function renderStars(n) {
+    return Array.from({length:5}, (_,i) =>
+      `<div class="star ${i < n ? 'filled' : 'empty'}"></div>`
+    ).join('');
+  }
+
+  function shuffleData() {
+    const tbody = document.getElementById('product-table');
+    tbody.innerHTML = '';
+    products.forEach(p => {
+      const jitter = (Math.random() - 0.5) * 8;
+      const price = Math.max(p.market * 0.9, p.price + jitter);
+      const stars = getStars(price, p.market);
+      const delta = ((price - p.market)/p.market*100);
+      const statuses = {5:'badge-green',4:'badge-green',3:'badge-yellow',2:'badge-orange',1:'badge-red'};
+      const labels = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'};
+      const dclass = delta > 0 ? 'delta-pos' : 'delta-neg';
+      const dstr = (delta > 0 ? '+' : '') + delta.toFixed(1) + '%';
+      tbody.innerHTML += `
+        <tr>
+          <td><div class="product-name">${p.name}</div><div class="product-ean">EAN ${p.ean}</div></td>
+          <td><div class="stars">${renderStars(stars)}</div></td>
+          <td><div class="price-current">€${price.toFixed(2)}</div></td>
+          <td><div class="price-market">€${p.market.toFixed(2)}</div></td>
+          <td><div class="price-delta ${dclass}">${dstr}</div></td>
+          <td><span class="badge ${statuses[stars]}">${labels[stars]}</span></td>
+          <td><button class="action-btn">Adjust</button></td>
+        </tr>`;
+    });
+  }
+
+  // Simulator
+  function runSim() {
+    const your = parseFloat(document.getElementById('sim-your-price').value) || 0;
+    const min = parseFloat(document.getElementById('sim-min-price').value) || 0;
+    const cost = parseFloat(document.getElementById('sim-cost').value) || 0;
+    const sellers = parseInt(document.getElementById('sim-sellers').value);
+    const rating = parseFloat(document.getElementById('sim-rating').value);
+    const delivery = parseInt(document.getElementById('sim-delivery').value);
+
+    if (!your || !min || min <= 0) return;
+
+    const pct = (your - min) / min * 100;
+    const stars = getStars(your, min);
+    const margin = your > 0 ? ((your - cost) / your * 100).toFixed(1) : '—';
+
+    // Star display
+    const starsEl = document.getElementById('sim-stars-display');
+    starsEl.innerHTML = Array.from({length:5}, (_,i) =>
+      `<div class="big-star ${i < stars ? 'filled' : 'empty'}"></div>`
+    ).join('');
+
+    // Classification label
+    const labels = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'};
+    const colors = {5:'sim-status-green',4:'sim-status-green',3:'sim-status-yellow',2:'sim-status-yellow',1:'sim-status-red'};
+    const classLabel = document.getElementById('sim-class-label');
+    classLabel.className = 'classification-label ' + colors[stars];
+    classLabel.textContent = `${stars} stars — ${labels[stars]}`;
+
+    const reasons = {
+      5:'Price is at or below market reference. Offer has koopblok priority and full advertising eligibility.',
+      4:'Within 5% of market minimum. Strong koopblok candidacy, full ad eligibility.',
+      3:'5–15% above market minimum. Reduced koopblok candidacy, advertising access limited.',
+      2:'15–30% above market minimum. Low koopblok probability, ad placement suppressed.',
+      1:'More than 30% above the cheapest competitor. Offer is excluded from advertising and koopblok.'
+    };
+    document.getElementById('sim-class-reason').textContent = reasons[stars];
+
+    // Results
+    const prem = pct.toFixed(1);
+    document.getElementById('sim-premium').textContent = (pct > 0 ? '+' : '') + prem + '% vs cheapest';
+    document.getElementById('sim-premium').style.color = pct <= 0 ? 'var(--accent)' : pct <= 5 ? 'var(--warn)' : 'var(--danger)';
+
+    document.getElementById('sim-margin').textContent = margin + '% gross margin';
+    document.getElementById('sim-margin').style.color = parseFloat(margin) > 20 ? 'var(--accent)' : parseFloat(margin) > 10 ? 'var(--warn)' : 'var(--danger)';
+
+    // Buy block estimate
+    let bbBase = [0, 5, 15, 40, 70, 85][stars];
+    if (rating >= 9) bbBase += 8;
+    if (delivery === 1) bbBase += 10;
+    if (sellers > 10) bbBase -= 10;
+    bbBase = Math.min(95, Math.max(2, bbBase));
+    document.getElementById('sim-buyblock').textContent = bbBase + '% estimated';
+    document.getElementById('sim-buyblock').style.color = bbBase > 60 ? 'var(--accent)' : bbBase > 30 ? 'var(--warn)' : 'var(--danger)';
+
+    const adVis = stars >= 2 ? (stars >= 4 ? 'Eligible' : 'Limited') : 'Excluded';
+    document.getElementById('sim-advis').textContent = adVis;
+    document.getElementById('sim-advis').style.color = stars >= 4 ? 'var(--accent)' : stars >= 2 ? 'var(--warn)' : 'var(--danger)';
+
+    // Recommended price for 5 stars
+    const rec = (min * 1.00).toFixed(2);
+    const rec4 = (min * 1.05).toFixed(2);
+    document.getElementById('sim-rec').textContent = `€${rec} (5★) or €${rec4} (4★)`;
+    document.getElementById('sim-rec').style.color = 'var(--accent)';
+
+    // Upgrade path
+    const upgrades = [];
+    for (let s = stars + 1; s <= 5; s++) {
+      const thresholds = {2:0.30, 3:0.15, 4:0.05, 5:0.00};
+      const targetPct = thresholds[s];
+      const targetPrice = (min * (1 + targetPct)).toFixed(2);
+      const drop = (your - parseFloat(targetPrice)).toFixed(2);
+      const newMargin = ((parseFloat(targetPrice) - cost)/parseFloat(targetPrice)*100).toFixed(1);
+      upgrades.push(`${s} stars → Adjust to €${targetPrice} (−€${drop}) · Gross margin: ${newMargin}%`);
+    }
+    document.getElementById('sim-upgrade-path').innerHTML = upgrades.length
+      ? upgrades.map(u => `<div style="padding: 3px 0; color: var(--muted); font-size: 12px;">→ ${u}</div>`).join('')
+      : '<div style="color: var(--green); font-size: 12px;">Offer is already at the highest rating tier.</div>';
+  }
+
+  // Init
+  shuffleData();
+  setTimeout(runSim, 100);
+</script>
+</body>
+</html>
