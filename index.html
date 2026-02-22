@@ -603,7 +603,7 @@
             <div class="card-title">Offer pricing overview</div>
             <div class="card-subtitle">Refreshed every 15 min · Ranked by revenue at risk</div>
           </div>
-          <button class="action-btn" onclick="shuffleData()">↻ Refresh</button>
+          <button class="action-btn" onclick="renderTable()">↻ Refresh</button>
         </div>
         <table>
           <thead>
@@ -847,57 +847,189 @@
     <div class="problem-section">
       <span class="section-tag">Problem definition</span>
       <div class="section-title">Where price classification breaks down</div>
-      <div class="section-desc">bol's price rating system (1–5 stars) governs koopblok eligibility, advertising access, and listing visibility for all 51,000 partners. Partners currently have limited visibility into how ratings are determined, when they change, and what the cost of inaction is.</div>
+      <div class="section-desc">bol's 1–5 star price rating governs koopblok eligibility, ad access, and listing visibility for 51,000 partners. Six structural gaps make the system difficult to navigate and act on.</div>
 
       <div class="problem-grid">
         <div class="problem-card">
           <div class="problem-num">01</div>
           <div class="problem-title">Opaque thresholds</div>
-          <div class="problem-body">bol publishes policy guidelines but not the exact deviation thresholds used for each star tier. Partners cannot model the impact of a price change before making it, or anticipate a rating drop caused by a competitor's adjustment.</div>
-          <div class="problem-stat">68% of partners report uncertainty about rating criteria</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>Exact deviation bands per star tier are not published</li>
+            <li>Partners can't model a price change before making it</li>
+            <li>Competitor moves can silently drop a rating with no warning</li>
+          </ul>
+          <div class="problem-stat">Assumed: ~68% of partners uncertain on criteria · To validate via partner survey</div>
         </div>
         <div class="problem-card">
           <div class="problem-num">02</div>
           <div class="problem-title">Delayed feedback loop</div>
-          <div class="problem-body">Without proactive signals, partners detect rating downgrades through manual checks or declining sales. By then, koopblok position and ad spend have already been lost. The current partner portal shows current rating only — no history, no triggers, no alerts.</div>
-          <div class="problem-stat">Average 3.2 days to detect a rating downgrade</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>Partners detect downgrades through declining sales, not alerts</li>
+            <li>Koopblok position and ad spend are lost before anyone notices</li>
+            <li>Portal shows current rating only — no history, no triggers</li>
+          </ul>
+          <div class="problem-stat">Assumed: ~3 day detection lag · Proxy: platform event logs</div>
         </div>
         <div class="problem-card">
           <div class="problem-num">03</div>
           <div class="problem-title">Undifferentiated price pressure</div>
-          <div class="problem-body">The rating system applies uniform thresholds regardless of category. Price sensitivity varies significantly — from electronics (high) to books (low) — but all partners are measured against the same bands. This creates misleading classifications across categories.</div>
-          <div class="problem-stat">Price weighting varies 40–80% by category</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>Same deviation bands applied across all categories</li>
+            <li>Electronics (high elasticity) and books (low elasticity) treated identically</li>
+            <li>Creates systematically unfair classifications by category</li>
+          </ul>
+          <div class="problem-stat">Validated: price weighting varies 40–80% by category · ScienceDirect 2024</div>
         </div>
         <div class="problem-card">
           <div class="problem-num">04</div>
           <div class="problem-title">No margin context</div>
-          <div class="problem-body">The classification system optimises for price competitiveness but has no visibility into partner margins. Partners sometimes lower prices to reach a higher rating tier while selling below cost. bol has no mechanism to surface this risk.</div>
-          <div class="problem-stat">Est. 22% of rating-driven price adjustments reduce net margin</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>System optimises for price rank, not partner profitability</li>
+            <li>Partners sometimes sell below cost chasing a higher star tier</li>
+            <li>No mechanism to surface this risk before the adjustment is made</li>
+          </ul>
+          <div class="problem-stat">Assumed: ~22% of adjustments reduce net margin · Requires cost price data</div>
         </div>
         <div class="problem-card">
           <div class="problem-num">05</div>
           <div class="problem-title">Algorithmic pricing instability</div>
-          <div class="problem-body">A significant share of top-listed products are priced by automated re-pricing tools. These can produce coordinated price patterns — either inflating prices when two algorithms interact, or driving unsustainable price floors. The platform currently has no detection layer.</div>
-          <div class="problem-stat">~40% of high-volume products have 2+ algorithmic sellers</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>~40% of top listings have 2+ automated re-pricers active</li>
+            <li>Two competing algorithms can inflate prices or race to unsustainable floors</li>
+            <li>No detection layer exists on the platform today</li>
+          </ul>
+          <div class="problem-stat">Validated: ~40% of high-volume products have algorithmic sellers · ScienceDirect 2024</div>
         </div>
         <div class="problem-card">
           <div class="problem-num">06</div>
-          <div class="problem-title">Tooling gap outsourced to third parties</div>
-          <div class="problem-body">The partner portal shows current star rating but no predictive or simulation capability. Partners spend significantly on external tools (Channable, Omnia, PriceTweakers) to fill this gap. bol is funding a third-party ecosystem to cover a core platform function.</div>
-          <div class="problem-stat">€3M+ estimated annual partner spend on external repricers</div>
+          <div class="problem-title">Tooling gap outsourced</div>
+          <ul class="problem-body" style="padding-left:14px;margin:0;list-style:disc;">
+            <li>Portal shows star rating — no simulation, history, or predictive tools</li>
+            <li>Partners pay Channable, Omnia, PriceTweakers to fill the gap</li>
+            <li>bol is funding a third-party ecosystem for a core platform function</li>
+          </ul>
+          <div class="problem-stat">Estimated: €3M+ annual partner spend on external repricers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEAKNESS 3 FIX: bol's incentive tension -->
+    <div class="problem-section">
+      <span class="section-tag">Platform perspective</span>
+      <div class="section-title">Why bol has a stake in keeping this opaque</div>
+      <div class="section-desc">This analysis is written from the partner lens — but a senior PM at bol must also hold the platform's perspective. More transparency for partners creates real tradeoffs for bol.</div>
+
+      <div class="card" style="overflow: hidden; margin-bottom: 20px;">
+        <div class="card-header">
+          <div class="card-title">The dual-sided tension</div>
+          <div class="card-subtitle">More transparency for partners may reduce bol's pricing leverage</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);">
+          <div style="padding:20px;border-right:1px solid var(--border);">
+            <div style="font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;">Bol's interest in transparency</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.8;padding-left:16px;margin:0;list-style:disc;">
+              <li>Profitable partners invest more in the platform long-term</li>
+              <li>Native tooling keeps partner spend inside the bol ecosystem</li>
+              <li>Informed partners make fewer errors → less support overhead</li>
+              <li>Competitive prices drive consumer trust and GMV</li>
+            </ul>
+          </div>
+          <div style="padding:20px;">
+            <div style="font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;">Bol's interest in opacity</div>
+            <ul style="font-size:13px;color:var(--text);line-height:1.8;padding-left:16px;margin:0;list-style:disc;">
+              <li>Exact bands enable gaming — partners price to the minimum, not below it</li>
+              <li>Transparency may commoditise signals bol uses to steer behaviour</li>
+              <li>Margin floors could reduce downward price pressure on the platform</li>
+              <li>Category calibration requires ongoing data investment</li>
+            </ul>
+          </div>
+        </div>
+        <div style="padding:14px 20px;background:var(--blue-light);border-top:1px solid var(--blue-mid);font-size:13px;color:var(--text);line-height:1.6;">
+          <strong>PM judgement:</strong> The right answer is <em>structured</em> transparency — show partners where they stand and what to adjust, without exposing the exact algorithmic weights. This preserves bol's classification leverage while eliminating the uncertainty that drives third-party tool adoption.
         </div>
       </div>
     </div>
 
     <div class="problem-section">
+      <span class="section-tag">Initiative 4 — deep dive</span>
+      <div class="section-title">Category-differentiated thresholds</div>
+      <div class="section-desc">Uniform 5–15–30% bands applied across all categories create unfair classifications. A €10 gap on a €20 board game and a €10 gap on a €500 TV are not equivalent signals — but bol's system treats them identically today.</div>
+
+      <div class="card" style="overflow:hidden;margin-bottom:20px;">
+        <div class="card-header">
+          <div class="card-title">Indicative recalibration by category</div>
+          <div class="card-subtitle">Directional estimates · Requires validation against bol's internal conversion data</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Elasticity</th>
+              <th>Current 4★ band</th>
+              <th>Proposed 4★ band</th>
+              <th>Why</th>
+              <th>Partner impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:600">Consumer electronics</td>
+              <td><span class="badge badge-red">High</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤3%</td>
+              <td style="color:var(--muted);font-size:12px">5% on a €500 TV = €25 — shoppers notice</td>
+              <td style="color:var(--muted);font-size:12px">Tighter bands; more fall to 3★</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Toys &amp; games</td>
+              <td><span class="badge badge-yellow">Medium</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤7%</td>
+              <td style="color:var(--muted);font-size:12px">Brand loyalty + seasonal demand reduces pure price sensitivity</td>
+              <td style="color:var(--muted);font-size:12px">More margin room at 4★</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Books &amp; media</td>
+              <td><span class="badge badge-green">Low</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤12%</td>
+              <td style="color:var(--muted);font-size:12px">Fixed RRP culture; consumers don't comparison shop below €2</td>
+              <td style="color:var(--muted);font-size:12px">Significant margin relief for booksellers</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Personal care</td>
+              <td><span class="badge badge-yellow">Medium</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤6%</td>
+              <td style="color:var(--muted);font-size:12px">Brand trust dominant; repeat purchase reduces one-time price focus</td>
+              <td style="color:var(--muted);font-size:12px">Minor relief; minimal disruption</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">Fashion &amp; footwear</td>
+              <td><span class="badge badge-yellow">Medium</span></td>
+              <td style="font-family:monospace">≤5%</td>
+              <td style="font-family:monospace;color:var(--blue);font-weight:600">≤8%</td>
+              <td style="color:var(--muted);font-size:12px">Size/fit and style dominate over €5–€10 price gaps</td>
+              <td style="color:var(--muted);font-size:12px">Wider tolerance; helps long-tail sellers</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding:14px 20px;background:#fafafa;border-top:1px solid var(--border);font-size:12px;color:var(--muted);">
+          <strong style="color:var(--text);">Calibration method:</strong> Derive bands from bol's internal A/B conversion data — specifically the deviation point at which CTR drops materially vs. the koopblok winner. Validate with 8–12 weeks of data per category before rollout.
+        </div>
+      </div>
+    </div>
+
+    <!-- WEAKNESS 2 FIX: Data sourcing transparency -->
+    <div class="problem-section">
       <span class="section-tag">Data validation</span>
-      <div class="section-title">Supporting evidence</div>
-      <div class="section-desc">Validated against academic research (ScienceDirect 2024), bol partner platform documentation, and third-party marketplace tool analysis.</div>
+      <div class="section-title">Supporting evidence — with sourcing transparency</div>
+      <div class="section-desc">All metrics are labelled by confidence: <strong>Validated</strong> = published external source · <strong>Assumed</strong> = directional estimate needing internal validation · <strong>Proxy</strong> = derived from adjacent data.</div>
 
       <div class="card" style="overflow: hidden; margin-bottom: 32px;">
         <div class="card-header">
           <div class="card-title">Evidence by problem area</div>
-          <div class="card-subtitle">Sources used to size and validate each problem</div>
+          <div class="card-subtitle">Confidence level is explicit — assumptions are flagged, not presented as facts</div>
         </div>
         <table>
           <thead>
@@ -905,137 +1037,121 @@
               <th>Metric</th>
               <th>Finding</th>
               <th>Source</th>
-              <th>Severity</th>
+              <th>Confidence</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Koopblok purchase concentration</td>
               <td>97% of customers purchase from the koopblok winner</td>
-              <td>ChannelEngine / bol</td>
-              <td><span class="badge badge-red">Critical</span></td>
+              <td>ChannelEngine / bol partner data</td>
+              <td><span class="badge badge-green">Validated</span></td>
             </tr>
             <tr>
               <td>Algorithmic seller prevalence</td>
-              <td>Over 40% of top-2,800 products had automated re-pricing in the study period</td>
-              <td>ScienceDirect 2024</td>
-              <td><span class="badge badge-red">High</span></td>
+              <td>Over 40% of top-2,800 products had automated re-pricing in study period</td>
+              <td>ScienceDirect 2024 (bol.com dataset)</td>
+              <td><span class="badge badge-green">Validated</span></td>
             </tr>
             <tr>
-              <td>Algorithmic price collusion</td>
-              <td>Prices are highest when two algorithms compete against each other with a medium number of sellers</td>
-              <td>Empirical analysis, bol data 2020</td>
-              <td><span class="badge badge-orange">High</span></td>
+              <td>Algorithmic price coordination</td>
+              <td>Prices are highest when two algorithms compete with a medium number of sellers</td>
+              <td>Empirical analysis, bol.com pricing data 2020</td>
+              <td><span class="badge badge-green">Validated</span></td>
             </tr>
             <tr>
               <td>1-star ad exclusion</td>
               <td>Offers rated 1 star are excluded from marketplace advertising</td>
-              <td>bol partner platform docs</td>
-              <td><span class="badge badge-red">Critical</span></td>
+              <td>bol partner platform documentation</td>
+              <td><span class="badge badge-green">Validated</span></td>
             </tr>
             <tr>
-              <td>Search page visibility</td>
-              <td>78% of clicks occur on page 1; 60% within the top 10 listings</td>
-              <td>ChannelEngine 2025</td>
-              <td><span class="badge badge-orange">High</span></td>
+              <td>Search page click distribution</td>
+              <td>78% of clicks on page 1; 60% within the top 10 listings</td>
+              <td>ChannelEngine marketplace report 2025</td>
+              <td><span class="badge badge-green">Validated</span></td>
             </tr>
             <tr>
-              <td>Volume discount conversion</td>
-              <td>Offers with a volume discount sell up to 30% more units</td>
-              <td>bol whitepaper</td>
-              <td><span class="badge badge-yellow">Medium</span></td>
+              <td>Partner uncertainty on rating criteria</td>
+              <td>~68% of partners uncertain how ratings are assigned</td>
+              <td>Directional estimate · To validate via bol partner survey or CS ticket analysis</td>
+              <td><span class="badge badge-yellow">Assumed</span></td>
+            </tr>
+            <tr>
+              <td>Rating downgrade detection lag</td>
+              <td>~3.2 days average time to detect a star downgrade</td>
+              <td>Proxy: ChannelEngine partner behaviour data · To validate with bol internal event logs</td>
+              <td><span class="badge badge-yellow">Assumed</span></td>
+            </tr>
+            <tr>
+              <td>Margin-eroding price adjustments</td>
+              <td>~22% of rating-driven adjustments reduce net margin</td>
+              <td>Derived estimate · Requires partner cost price data to validate</td>
+              <td><span class="badge badge-orange">Proxy</span></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
+    <!-- WEAKNESS 5 FIX: Success metrics -->
     <div class="problem-section">
-      <span class="section-tag">Solution prioritisation</span>
-      <div class="section-title">Roadmap ranked by impact and effort</div>
+      <span class="section-tag">Success metrics</span>
+      <div class="section-title">How we'd know each initiative is working</div>
+      <div class="section-desc">Each initiative has a primary metric, a guard rail, a quantified target, and a validation timeline. Without these, a roadmap is a delivery plan — not a product strategy.</div>
 
-      <div class="card" style="overflow: hidden; margin-bottom: 24px;">
+      <div class="card" style="overflow:hidden;margin-bottom:24px;">
         <table class="priority-table">
           <thead>
             <tr>
               <th>#</th>
               <th>Initiative</th>
-              <th>Description</th>
-              <th>Effort</th>
-              <th>Impact</th>
-              <th>Timeline</th>
+              <th>Primary metric (north star)</th>
+              <th>Guard rail</th>
+              <th>Target</th>
+              <th>Validate by</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><span class="p-rank s1">1</span></td>
-              <td style="font-weight: 700;">Price rating simulator</td>
-              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Native partner portal tool: model rating at any price point, with margin context and adjustment guidance. Eliminates dependency on external repricers for this use case.</td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Low</div>
-                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div></div>
-              </td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Very high</div>
-                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div></div>
-              </td>
-              <td><span class="badge badge-green">Now</span></td>
+              <td style="font-weight:700">Price rating simulator</td>
+              <td style="font-size:12px;color:var(--text)">% of partners who use simulator before making a price change (adoption rate)</td>
+              <td style="font-size:12px;color:var(--muted)">No increase in partner support tickets re: rating confusion</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">≥25% of active partners within 90 days</td>
+              <td style="font-size:12px"><span class="badge badge-green">Now + 90d</span></td>
             </tr>
             <tr>
               <td><span class="p-rank s2">2</span></td>
-              <td style="font-weight: 700;">Rating change alerts</td>
-              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Proactive notifications when an offer drops below a partner-defined threshold, with suggested adjustment and estimated impact. Reduces detection lag from days to minutes.</td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Medium</div>
-                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div></div>
-              </td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
-                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot empty"></div></div>
-              </td>
-              <td><span class="badge badge-green">Q1</span></td>
+              <td style="font-weight:700">Rating change alerts</td>
+              <td style="font-size:12px;color:var(--text)">Reduction in median time from rating drop to corrective price change</td>
+              <td style="font-size:12px;color:var(--muted)">Alert unsubscribe rate &lt;15%; no increase in erratic pricing</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">Median lag &lt;4 hours (from ~3.2 days baseline)</td>
+              <td style="font-size:12px"><span class="badge badge-green">Q1 + 60d</span></td>
             </tr>
             <tr>
               <td><span class="p-rank s3">3</span></td>
-              <td style="font-weight: 700;">Margin floor protection</td>
-              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Partners set a cost price floor; the system flags when a recommended adjustment would breach it. Prevents rating-optimisation decisions that reduce profitability.</td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Medium</div>
-                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div><div class="effort-dot empty"></div></div>
-              </td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
-                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot empty"></div></div>
-              </td>
-              <td><span class="badge badge-yellow">Q2</span></td>
+              <td style="font-weight:700">Margin floor protection</td>
+              <td style="font-size:12px;color:var(--text)">% of partners who set a cost floor; % of flagged adjustments that partners override vs. accept</td>
+              <td style="font-size:12px;color:var(--muted)">No reduction in platform GMV or koopblok competitiveness scores</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">≥30% of partners set floor; ≥60% heed warnings</td>
+              <td style="font-size:12px"><span class="badge badge-yellow">Q2 + 90d</span></td>
             </tr>
             <tr>
               <td><span class="p-rank s4">4</span></td>
-              <td style="font-weight: 700;">Category-differentiated thresholds</td>
-              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">Rating bands calibrated per category based on observed price elasticity. Addresses the mismatch between uniform thresholds and category-specific consumer behaviour.</td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
-                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot empty"></div></div>
-              </td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Very high</div>
-                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div></div>
-              </td>
-              <td><span class="badge badge-orange">Q3</span></td>
+              <td style="font-weight:700">Category thresholds</td>
+              <td style="font-size:12px;color:var(--text)">Change in conversion rate by category after recalibration; partner revenue per SKU in affected categories</td>
+              <td style="font-size:12px;color:var(--muted)">Consumer-facing price competitiveness scores maintained or improved</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">+8% partner GMV in recalibrated categories; flat/positive consumer NPS</td>
+              <td style="font-size:12px"><span class="badge badge-orange">Q3 + 12wk</span></td>
             </tr>
             <tr>
               <td><span class="p-rank s4">5</span></td>
-              <td style="font-weight: 700;">Algorithmic pricing detection</td>
-              <td style="color: var(--muted); font-size: 12px; max-width: 280px;">ML-based detection of coordinated price movement patterns (mirroring, parallel adjustment cycles). Flags listings for review and informs classification adjustments.</td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">Very high</div>
-                <div class="effort-bar"><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div><div class="effort-dot filled"></div></div>
-              </td>
-              <td>
-                <div style="font-size: 11px; font-family: var(--mono); color: var(--muted); margin-bottom: 4px;">High</div>
-                <div class="impact-bar"><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot filled"></div><div class="impact-dot empty"></div></div>
-              </td>
-              <td><span class="badge badge-orange">Q4</span></td>
+              <td style="font-weight:700">Algorithmic detection</td>
+              <td style="font-size:12px;color:var(--text)">% of flagged algorithmic patterns reviewed; reduction in coordinated pricing incidents on high-GMV listings</td>
+              <td style="font-size:12px;color:var(--muted)">False positive rate &lt;5%; no adverse partner relations incidents from flags</td>
+              <td style="font-size:12px;font-weight:600;color:var(--blue)">≥80% of flagged listings reviewed within 48h; 20% reduction in detected coordination incidents</td>
+              <td style="font-size:12px"><span class="badge badge-orange">Q4 + 90d</span></td>
             </tr>
           </tbody>
         </table>
@@ -1044,7 +1160,7 @@
       <div class="cta-banner">
         <div class="cta-text">
           <h3>Initiative 1 is implemented in the simulator tab</h3>
-          <p>The price rating simulator demonstrates full end-to-end functionality as it would appear in the partner portal</p>
+          <p>The price rating simulator demonstrates full end-to-end functionality as it would appear in the partner portal · Click any "Simulate" row in Offer overview to pre-load a product</p>
         </div>
         <button class="cta-btn" onclick="showTab('simulator')">View simulator</button>
       </div>
@@ -1056,7 +1172,16 @@
 </div><!-- /container -->
 
 <script>
-  // Tab switching
+  // ─── constants ───────────────────────────────────────────────────────────────
+  const C = {
+    green:  '#1a7a1a',
+    yellow: '#8a6800',
+    red:    '#cc0000',
+    muted:  '#767676',
+    blue:   '#0000ff',
+  };
+
+  // ─── tab switching ────────────────────────────────────────────────────────────
   function showTab(id) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1066,24 +1191,25 @@
     if (id === 'simulator') runSim();
   }
 
-  // Product table data
+  // ─── product data (fixed, realistic, category-labelled) ──────────────────────
+  // Weakness 1 fix: deterministic data pre-loaded on page render
   const products = [
-    { name: 'LEGO City 60388', ean: '5702017415475', price: 39.99, market: 34.99 },
-    { name: 'Bosch MUM5 Mixer', ean: '4242005204724', price: 249.00, market: 239.00 },
-    { name: 'Pokémon Scarlet', ean: '0045496478513', price: 54.99, market: 49.99 },
-    { name: 'Philips Hue Starter Kit', ean: '8719514328280', price: 79.99, market: 75.99 },
-    { name: 'Nike Air Max 270', ean: '0842778139460', price: 119.95, market: 89.99 },
-    { name: 'Nespresso Vertuo Pop', ean: '7630041682610', price: 59.99, market: 59.00 },
-    { name: 'Kindle Paperwhite', ean: 'B09TMF6475', price: 139.99, market: 139.99 },
-    { name: 'Oral-B iO Series 7', ean: '4210201409052', price: 189.00, market: 149.00 },
+    { name: 'LEGO Technic 42143 Ferrari Daytona', ean: '5702017117492', cat: 'Toys',        listed: 229.99, market: 199.99, cost: 148.00 },
+    { name: 'Philips Airfryer XXL HD9630',        ean: '8720389002380', cat: 'Kitchen',      listed: 149.95, market: 139.00, cost: 89.00  },
+    { name: 'Samsung Galaxy Tab S9 FE',           ean: '8806095160368', cat: 'Electronics',  listed: 379.00, market: 299.00, cost: 240.00 },
+    { name: 'Nespresso Vertuo Next ENV120',        ean: '7630041682610', cat: 'Kitchen',      listed: 79.99,  market: 77.00,  cost: 44.00  },
+    { name: 'Dyson V15 Detect Absolute',          ean: '5025155069882', cat: 'Home',         listed: 619.00, market: 449.00, cost: 380.00 },
+    { name: 'Kindle Paperwhite (16 GB)',           ean: 'B09TMF6475',   cat: 'Electronics',  listed: 159.99, market: 159.99, cost: 98.00  },
+    { name: 'Oral-B iO Series 7 Elektrische',     ean: '4210201409052', cat: 'Personal care',listed: 189.00, market: 149.00, cost: 92.00  },
+    { name: 'Nike Air Max 270 (maat 42)',          ean: '0842778139460', cat: 'Fashion',      listed: 119.95, market: 109.99, cost: 62.00  },
   ];
 
-  function getStars(price, market) {
-    const pct = (price - market) / market * 100;
-    if (pct <= 0) return 5;
-    if (pct <= 5) return 4;
-    if (pct <= 15) return 3;
-    if (pct <= 30) return 2;
+  function getStars(listed, market) {
+    const pct = (listed - market) / market * 100;
+    if (pct <= 0)   return 5;
+    if (pct <= 5)   return 4;
+    if (pct <= 15)  return 3;
+    if (pct <= 30)  return 2;
     return 1;
   }
 
@@ -1093,112 +1219,128 @@
     ).join('');
   }
 
-  function shuffleData() {
+  function renderTable() {
     const tbody = document.getElementById('product-table');
     tbody.innerHTML = '';
     products.forEach(p => {
-      const jitter = (Math.random() - 0.5) * 8;
-      const price = Math.max(p.market * 0.9, p.price + jitter);
-      const stars = getStars(price, p.market);
-      const delta = ((price - p.market)/p.market*100);
-      const statuses = {5:'badge-green',4:'badge-green',3:'badge-yellow',2:'badge-orange',1:'badge-red'};
-      const labels = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'};
+      const stars  = getStars(p.listed, p.market);
+      const delta  = (p.listed - p.market) / p.market * 100;
+      const status = {5:'badge-green',4:'badge-green',3:'badge-yellow',2:'badge-orange',1:'badge-red'}[stars];
+      const label  = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'}[stars];
       const dclass = delta > 0 ? 'delta-pos' : 'delta-neg';
-      const dstr = (delta > 0 ? '+' : '') + delta.toFixed(1) + '%';
+      const dstr   = (delta > 0 ? '+' : '') + delta.toFixed(1) + '%';
+      const margin = ((p.listed - p.cost) / p.listed * 100).toFixed(0);
       tbody.innerHTML += `
         <tr>
-          <td><div class="product-name">${p.name}</div><div class="product-ean">EAN ${p.ean}</div></td>
+          <td>
+            <div class="product-name">${p.name}</div>
+            <div class="product-ean">EAN ${p.ean} · <span style="color:var(--muted-light)">${p.cat}</span></div>
+          </td>
           <td><div class="stars">${renderStars(stars)}</div></td>
-          <td><div class="price-current">€${price.toFixed(2)}</div></td>
-          <td><div class="price-market">€${p.market.toFixed(2)}</div></td>
+          <td><div class="price-current">€${p.listed.toFixed(2)}</div><div class="price-market">margin ${margin}%</div></td>
+          <td><div class="price-current">€${p.market.toFixed(2)}</div></td>
           <td><div class="price-delta ${dclass}">${dstr}</div></td>
-          <td><span class="badge ${statuses[stars]}">${labels[stars]}</span></td>
-          <td><button class="action-btn">Adjust</button></td>
+          <td><span class="badge ${status}">${label}</span></td>
+          <td>
+            <button class="action-btn" onclick="loadIntoSim(${products.indexOf(p)})">Simulate</button>
+          </td>
         </tr>`;
     });
   }
 
-  // Simulator
+  // Clicking "Simulate" on a row pre-loads that product into the simulator
+  function loadIntoSim(idx) {
+    const p = products[idx];
+    document.getElementById('sim-your-price').value = p.listed;
+    document.getElementById('sim-min-price').value  = p.market;
+    document.getElementById('sim-cost').value       = p.cost;
+    showTab('simulator');
+  }
+
+  // ─── simulator ───────────────────────────────────────────────────────────────
   function runSim() {
-    const your = parseFloat(document.getElementById('sim-your-price').value) || 0;
-    const min = parseFloat(document.getElementById('sim-min-price').value) || 0;
-    const cost = parseFloat(document.getElementById('sim-cost').value) || 0;
-    const sellers = parseInt(document.getElementById('sim-sellers').value);
-    const rating = parseFloat(document.getElementById('sim-rating').value);
+    const your     = parseFloat(document.getElementById('sim-your-price').value) || 0;
+    const min      = parseFloat(document.getElementById('sim-min-price').value)  || 0;
+    const cost     = parseFloat(document.getElementById('sim-cost').value)       || 0;
+    const sellers  = parseInt(document.getElementById('sim-sellers').value);
+    const rating   = parseFloat(document.getElementById('sim-rating').value);
     const delivery = parseInt(document.getElementById('sim-delivery').value);
 
     if (!your || !min || min <= 0) return;
 
-    const pct = (your - min) / min * 100;
-    const stars = getStars(your, min);
+    const pct    = (your - min) / min * 100;
+    const stars  = getStars(your, min);
     const margin = your > 0 ? ((your - cost) / your * 100).toFixed(1) : '—';
 
-    // Star display
-    const starsEl = document.getElementById('sim-stars-display');
-    starsEl.innerHTML = Array.from({length:5}, (_,i) =>
-      `<div class="big-star ${i < stars ? 'filled' : 'empty'}"></div>`
-    ).join('');
+    // Stars
+    document.getElementById('sim-stars-display').innerHTML =
+      Array.from({length:5}, (_,i) =>
+        `<div class="big-star ${i < stars ? 'filled' : 'empty'}"></div>`
+      ).join('');
 
-    // Classification label
-    const labels = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'};
-    const colors = {5:'sim-status-green',4:'sim-status-green',3:'sim-status-yellow',2:'sim-status-yellow',1:'sim-status-red'};
-    const classLabel = document.getElementById('sim-class-label');
-    classLabel.className = 'classification-label ' + colors[stars];
-    classLabel.textContent = `${stars} stars — ${labels[stars]}`;
+    // Label + reason
+    const labels  = {5:'Optimal',4:'Competitive',3:'Within range',2:'Below threshold',1:'Not shown'};
+    const colours = {5:'sim-status-green',4:'sim-status-green',3:'sim-status-yellow',2:'sim-status-yellow',1:'sim-status-red'};
+    const classEl = document.getElementById('sim-class-label');
+    classEl.className   = 'classification-label ' + colours[stars];
+    classEl.textContent = `${stars} stars — ${labels[stars]}`;
 
     const reasons = {
-      5:'Price is at or below market reference. Offer has koopblok priority and full advertising eligibility.',
-      4:'Within 5% of market minimum. Strong koopblok candidacy, full ad eligibility.',
-      3:'5–15% above market minimum. Reduced koopblok candidacy, advertising access limited.',
-      2:'15–30% above market minimum. Low koopblok probability, ad placement suppressed.',
-      1:'More than 30% above the cheapest competitor. Offer is excluded from advertising and koopblok.'
+      5: 'Price is at or below the market reference. Offer qualifies for koopblok priority and full ad eligibility.',
+      4: 'Within 5% of market minimum. Strong koopblok candidate, full advertising access.',
+      3: '5–15% above market minimum. Reduced koopblok candidacy; ads visible but limited.',
+      2: '15–30% above market minimum. Unlikely to win koopblok; ad placement suppressed.',
+      1: 'More than 30% above the cheapest active offer. Excluded from advertising and koopblok.'
     };
     document.getElementById('sim-class-reason').textContent = reasons[stars];
 
-    // Results
-    const prem = pct.toFixed(1);
-    document.getElementById('sim-premium').textContent = (pct > 0 ? '+' : '') + prem + '% vs cheapest';
-    document.getElementById('sim-premium').style.color = pct <= 0 ? 'var(--accent)' : pct <= 5 ? 'var(--warn)' : 'var(--danger)';
+    // Deviation
+    const premEl = document.getElementById('sim-premium');
+    premEl.textContent = (pct > 0 ? '+' : '') + pct.toFixed(1) + '% vs market minimum';
+    premEl.style.color = pct <= 0 ? C.green : pct <= 5 ? C.yellow : C.red;
 
-    document.getElementById('sim-margin').textContent = margin + '% gross margin';
-    document.getElementById('sim-margin').style.color = parseFloat(margin) > 20 ? 'var(--accent)' : parseFloat(margin) > 10 ? 'var(--warn)' : 'var(--danger)';
+    // Margin
+    const margEl = document.getElementById('sim-margin');
+    margEl.textContent = margin + '%';
+    margEl.style.color = parseFloat(margin) > 20 ? C.green : parseFloat(margin) > 10 ? C.yellow : C.red;
 
-    // Buy block estimate
-    let bbBase = [0, 5, 15, 40, 70, 85][stars];
-    if (rating >= 9) bbBase += 8;
-    if (delivery === 1) bbBase += 10;
-    if (sellers > 10) bbBase -= 10;
-    bbBase = Math.min(95, Math.max(2, bbBase));
-    document.getElementById('sim-buyblock').textContent = bbBase + '% estimated';
-    document.getElementById('sim-buyblock').style.color = bbBase > 60 ? 'var(--accent)' : bbBase > 30 ? 'var(--warn)' : 'var(--danger)';
+    // Koopblok probability
+    let bb = [0, 5, 15, 40, 70, 85][stars];
+    if (rating >= 9) bb += 8;
+    if (delivery === 1) bb += 10;
+    if (sellers > 10)   bb -= 10;
+    bb = Math.min(95, Math.max(2, bb));
+    const bbEl = document.getElementById('sim-buyblock');
+    bbEl.textContent = bb + '% estimated';
+    bbEl.style.color = bb > 60 ? C.green : bb > 30 ? C.yellow : C.red;
 
-    const adVis = stars >= 2 ? (stars >= 4 ? 'Eligible' : 'Limited') : 'Excluded';
-    document.getElementById('sim-advis').textContent = adVis;
-    document.getElementById('sim-advis').style.color = stars >= 4 ? 'var(--accent)' : stars >= 2 ? 'var(--warn)' : 'var(--danger)';
+    // Ad eligibility
+    const adEl = document.getElementById('sim-advis');
+    adEl.textContent = stars >= 4 ? 'Eligible' : stars >= 2 ? 'Limited' : 'Excluded';
+    adEl.style.color  = stars >= 4 ? C.green : stars >= 2 ? C.yellow : C.red;
 
-    // Recommended price for 5 stars
-    const rec = (min * 1.00).toFixed(2);
-    const rec4 = (min * 1.05).toFixed(2);
-    document.getElementById('sim-rec').textContent = `€${rec} (5★) or €${rec4} (4★)`;
-    document.getElementById('sim-rec').style.color = 'var(--accent)';
+    // Reference prices
+    document.getElementById('sim-rec').textContent =
+      `€${(min).toFixed(2)} for 5 stars · €${(min * 1.05).toFixed(2)} for 4 stars`;
+    document.getElementById('sim-rec').style.color = C.blue;
 
-    // Upgrade path
+    // Adjustment path
     const upgrades = [];
+    const thresholds = {2:0.30, 3:0.15, 4:0.05, 5:0.00};
     for (let s = stars + 1; s <= 5; s++) {
-      const thresholds = {2:0.30, 3:0.15, 4:0.05, 5:0.00};
-      const targetPct = thresholds[s];
-      const targetPrice = (min * (1 + targetPct)).toFixed(2);
-      const drop = (your - parseFloat(targetPrice)).toFixed(2);
-      const newMargin = ((parseFloat(targetPrice) - cost)/parseFloat(targetPrice)*100).toFixed(1);
-      upgrades.push(`${s} stars → Adjust to €${targetPrice} (−€${drop}) · Gross margin: ${newMargin}%`);
+      const target    = (min * (1 + thresholds[s])).toFixed(2);
+      const drop      = (your - parseFloat(target)).toFixed(2);
+      const newMargin = ((parseFloat(target) - cost) / parseFloat(target) * 100).toFixed(1);
+      const marginNote = parseFloat(newMargin) < 10 ? ' ⚠ margin below 10%' : '';
+      upgrades.push(`${s} stars → €${target} (−€${drop} · margin ${newMargin}%${marginNote})`);
     }
     document.getElementById('sim-upgrade-path').innerHTML = upgrades.length
-      ? upgrades.map(u => `<div style="padding: 3px 0; color: var(--muted); font-size: 12px;">→ ${u}</div>`).join('')
-      : '<div style="color: var(--green); font-size: 12px;">Offer is already at the highest rating tier.</div>';
+      ? upgrades.map(u => `<div style="padding:4px 0;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border)">→ ${u}</div>`).join('')
+      : `<div style="color:${C.green};font-size:12px;font-weight:600">Already at the highest rating tier.</div>`;
   }
 
-  // Init
-  shuffleData();
+  // ─── init ─────────────────────────────────────────────────────────────────────
+  renderTable();
   setTimeout(runSim, 100);
 </script>
 </body>
