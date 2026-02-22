@@ -91,7 +91,7 @@
   .hero {
     background: var(--white);
     border-bottom: 1px solid var(--border);
-    padding: 40px 0 0;
+    padding: 20px 0 0;
   }
   .hero-inner {
     max-width: 1200px;
@@ -99,27 +99,27 @@
     padding: 0 24px;
   }
   .hero-eyebrow {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--blue);
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
   .hero h1 {
-    font-size: 28px;
+    font-size: 20px;
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.3px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: var(--text);
   }
   .hero p {
     color: var(--muted);
-    font-size: 14px;
+    font-size: 12px;
     max-width: 560px;
-    line-height: 1.6;
-    margin-bottom: 28px;
+    line-height: 1.5;
+    margin-bottom: 16px;
   }
 
   /* Tabs */
@@ -335,7 +335,7 @@
   .opp-type { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
 
   /* Simulator */
-  .sim-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sim-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
   .input-group { margin-bottom: 18px; }
   .input-label {
     font-size: 12px;
@@ -419,51 +419,47 @@
   .sim-status-gray { color: var(--muted); }
 
   /* Problems tab */
-  .problem-section { margin-bottom: 36px; }
+  .problem-section { margin-bottom: 24px; }
   .section-tag {
     font-size: 11px;
     font-weight: 600;
     color: var(--blue);
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     display: block;
   }
   .section-title {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: var(--text);
     letter-spacing: -0.2px;
   }
   .section-desc {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--muted);
-    line-height: 1.65;
+    line-height: 1.55;
     max-width: 680px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
 
-  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
   .problem-card {
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 20px;
+    padding: 14px;
   }
-  .problem-num { font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 8px; letter-spacing: 0.5px; }
-  .problem-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-  .problem-body { font-size: 12px; color: var(--muted); line-height: 1.65; }
+  .problem-num { font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 6px; letter-spacing: 0.5px; }
+  .problem-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .problem-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
   .problem-stat {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    color: var(--text);
     background: var(--blue-light);
-    margin: 14px -20px -20px;
-    padding: 10px 20px;
+    margin: 10px -14px -14px;
+    padding: 8px 14px;
     border-radius: 0 0 6px 6px;
     border-top: 1px solid var(--blue-mid);
     color: var(--blue);
@@ -534,6 +530,9 @@
   @media (max-width: 900px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
     .main-grid { grid-template-columns: 1fr; }
+    .problem-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
     .problem-grid { grid-template-columns: 1fr; }
     .sim-layout { grid-template-columns: 1fr; }
   }
@@ -608,7 +607,7 @@
           </div>
           <button class="action-btn" onclick="renderTable()">↻ Refresh</button>
         </div>
-        <div style="overflow-x:auto;overflow-y:auto;max-height:220px;">
+        <div style="overflow-x:auto;overflow-y:auto;max-height:390px;">
         <table style="min-width:700px;">
           <thead>
             <tr>
@@ -634,7 +633,7 @@
             <div class="card-subtitle">How bol assigns price ratings to offers</div>
           </div>
         </div>
-        <div class="legend-card" style="max-height:280px;overflow-y:auto;">
+        <div class="legend-card" style="max-height:390px;overflow-y:auto;">
           <div class="legend-item">
             <div class="legend-stars">
               <div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div><div class="legend-star"></div>
@@ -698,7 +697,7 @@
         </div>
         <span class="badge badge-green">€4,280 estimated weekly impact</span>
       </div>
-      <div class="opp-list" style="max-height:220px;overflow-y:auto;">
+      <div class="opp-list" style="max-height:480px;overflow-y:auto;">
         <div style="display:flex;justify-content:space-between;padding:8px 16px;background:#fafafa;border-bottom:1px solid var(--border);">
           <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;">Offer · Suggested action</div>
           <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;">Est. weekly revenue recovered</div>
@@ -779,8 +778,8 @@
       <div id="product-picker" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;padding-right:4px;"></div>
     </div>
 
-    <div class="sim-layout">
-      <div class="card" style="padding: 24px;">
+    <div class="sim-layout" style="align-items:start;">
+      <div class="card" style="padding: 20px;">
         <div class="card-header" style="padding: 0 0 14px; margin-bottom: 20px; border-bottom: 1px solid var(--border); background: transparent;">
           <div>
             <div class="card-title" id="sim-product-name" style="font-size:15px;">—</div>
@@ -836,21 +835,17 @@
         </div>
       </div>
 
-      <div>
-        <div class="sim-output" style="margin-bottom: 16px;">
-          <div style="font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px;">Price rating</div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="sim-output">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px;">Price rating</div>
           <div class="big-stars" id="sim-stars-display"></div>
           <div class="classification-label" id="sim-class-label">—</div>
-          <div style="font-size: 12px; color: var(--muted);" id="sim-class-reason">Select a product to begin</div>
-
-          <!-- Not shown warning banner — hidden by default -->
+          <div style="font-size:12px;color:var(--muted);" id="sim-class-reason">Select a product to begin</div>
           <div id="sim-not-shown-banner" style="display:none;margin-top:14px;padding:12px 14px;background:#ffe8e8;border:1px solid #ffcccc;border-radius:6px;border-left:4px solid var(--red);">
             <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">⚠ This product is not visible to buyers</div>
             <div style="font-size:12px;color:var(--text);line-height:1.6;">Your price is more than 30% above the cheapest competitor. Bol has removed this listing from search results — no buyer can find it until you lower the price. This is the most urgent state to fix.</div>
           </div>
-
-          <div style="height: 1px; background: var(--border); margin: 20px 0;"></div>
-
+          <div style="height:1px;background:var(--border);margin:20px 0;"></div>
           <div class="sim-result-row">
             <span class="sim-result-label">Deviation from market reference</span>
             <span class="sim-result-value" id="sim-premium">—</span>
@@ -872,16 +867,13 @@
             <span class="sim-result-value" id="sim-rec">—</span>
           </div>
         </div>
-
-        <div class="card" style="padding: 20px; background: #fafafa;">
-          <div class="card-title" style="margin-bottom: 12px; font-size: 13px;">Price adjustments to improve rating</div>
-          <div id="sim-upgrade-path" style="font-family: var(--mono); font-size: 12px; line-height: 1.9; color: var(--muted);"></div>
+        <div class="card" style="padding:20px;background:#fafafa;">
+          <div class="card-title" style="margin-bottom:12px;font-size:13px;">Price adjustments to improve rating</div>
+          <div id="sim-upgrade-path" style="font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--muted);"></div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- PROBLEM SPACE TAB -->
   <div id="tab-problems" class="panel active">
 
     <!-- PROBLEMS -->
@@ -1465,19 +1457,34 @@
     premEl.textContent = (pct > 0 ? '+' : '') + pct.toFixed(1) + '% vs market minimum';
     premEl.style.color = pct <= 0 ? C.green : pct <= 5 ? C.yellow : C.red;
 
-    // Margin
+    // Margin — reacts visibly to cost price input
     const margEl = document.getElementById('sim-margin');
-    margEl.textContent = margin + '%';
-    margEl.style.color = parseFloat(margin) > 20 ? C.green : parseFloat(margin) > 10 ? C.yellow : C.red;
+    const marginNum = parseFloat(margin);
+    if (!cost || cost <= 0) {
+      margEl.textContent = 'Enter cost price to calculate';
+      margEl.style.color = C.muted;
+    } else if (marginNum < 0) {
+      margEl.textContent = margin + '% ⚠ selling below cost';
+      margEl.style.color = C.red;
+    } else if (marginNum < 10) {
+      margEl.textContent = margin + '% ⚠ low margin';
+      margEl.style.color = C.yellow;
+    } else {
+      margEl.textContent = margin + '%';
+      margEl.style.color = C.green;
+    }
 
-    // Koopblok probability
+    // Koopblok probability — reacts visibly to delivery time
     let bb = [0, 5, 15, 40, 70, 85][stars];
     if (rating >= 9) bb += 8;
     if (delivery === 1) bb += 10;
-    if (sellers > 10)   bb -= 10;
+    else if (delivery === 3) bb -= 8;
+    else if (delivery === 5) bb -= 18;
+    if (sellers > 10) bb -= 10;
     bb = Math.min(95, Math.max(2, bb));
+    const deliveryNote = delivery === 1 ? ' · same-day +10pp' : delivery === 3 ? ' · slow delivery −8pp' : delivery === 5 ? ' · very slow −18pp' : '';
     const bbEl = document.getElementById('sim-buyblock');
-    bbEl.textContent = bb + '% estimated';
+    bbEl.textContent = bb + '% estimated' + deliveryNote;
     bbEl.style.color = bb > 60 ? C.green : bb > 30 ? C.yellow : C.red;
 
     // Ad eligibility
